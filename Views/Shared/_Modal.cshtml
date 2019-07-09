@@ -1,0 +1,72 @@
+﻿@model Mantencion.Models.Tareas
+@{
+    Layout = null;
+}
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="AjaxEdit">
+        <div class="form-group">
+            <label for="">N° registro</label>
+            <input asp-for="id_registro" id="id_registro_edit" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label for="">Fecha</label>
+            <input asp-for="fecha" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Fecha Actividad</label>
+            <input asp-for="fecha" type="date" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Turno</label>
+            <select asp-for="id_turno" class="form-control">
+                <option value="1">NOCHE</option>
+                <option value="2">DÍA</option>
+                <option value="3">TARDE</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Descripción Actividad</label>
+            <textarea asp-for="actividad" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Actividad Finalizada?</label>
+            <input asp-for="log_terminado" type="checkbox" />
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="SubmitEdit" value="Actualizar" class="btn btn-primary" style="float:right;" />
+        </div>
+    </form>
+</div>
+
+
+<environment include="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            crossorigin="anonymous"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>

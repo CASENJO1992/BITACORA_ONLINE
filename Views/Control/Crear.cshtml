@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+    string fecha = System.DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="AjaxCrear">
+        <div class="form-group">
+            <label class="control-label">Fecha Consumo</label>
+            <input id="fecha" value="@fecha" type="date" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Turno</label>
+            <select id="id_turno" class="form-control">
+                <option value="1">NOCHE</option>
+                <option value="2">DÍA</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Tipo Consumo</label>
+            <select id="id_tipo_consumo" class="form-control">
+                <option value="1">AGUA</option>
+                <option value="2">GAS</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Consumo m³ (Entrada)</label>
+            <input id="consumo_entrada" class="form-control" type="text" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Consumo m³ (Salida)</label>
+            <input id="consumo_salida" class="form-control" type="text"/>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="SubmitCrear" class="btn btn-primary" style="float:right;"><i class="far fa-save" style="font-size:20px;"></i> Crear Consumo</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+        $(function () {
+            $("#AjaxCrear").submit(function (e) {
+                e.preventDefault();
+
+                // Deshabilitamos el botón de Submit
+                $("#SubmitCrear").prop("disabled", true);
+                $.ajax({
+                    url: "@Url.Action("Crear", "Control")", // Url
+                    data: {
+                            // Datos / Parámetros
+                        fecha: $("#fecha").val(),
+                        id_turno: $("#id_turno").val(),
+                        id_tipo_consumo: $("#id_tipo_consumo").val(),
+                        consumo_entrada: $("#consumo_entrada").val(),
+                        consumo_salida: $("#consumo_salida").val(),
+                        consumo_total: $("#consumo_total").val()
+                    },
+                    type: "post"  // Verbo HTTP
+                })
+                // Se ejecuta si todo fue bien.
+                .done(function (result) {
+                    if (result != null) {
+                        $("#bd").html(result);
+
+                        // Un pequeño esfecto especial ;)
+                        $("#database .row").first().hide();
+                        $("#database .row").first().slideToggle("fast");
+                        // Habilitamos el botón de Submit
+                        $("#SubmitCrear").prop("disabled", false);
+                        $('#myModalCreate').modal('hide')
+                        // Mostramos un mensaje de éxito.
+                        $("#ExitoCreate").show("slow").delay(3000).hide("slow");
+                        $("#id_turno").val("");
+                        $("#id_tipo_consumo").val("");
+                        $("#consumo_entrada").val("");
+                        $("#consumo_salida").val("");
+                        $("#consumo_total").val("");
+                    }
+                })
+                // Se ejecuta si se produjo un error.
+                .fail(function (xhr, status, error) {
+                    // Mostramos un mensaje de error.
+                    $("#ErrorCreate").show("slow").delay(3000).hide("slow");
+
+                    // Habilitamos el botón de Submit
+                    $("#SubmitCrear").prop("disabled", false);
+                })
+                // Hacer algo siempre, haya sido exitosa o no.
+                .always(function () {
+                });
+            });
+        });
+</script>
+

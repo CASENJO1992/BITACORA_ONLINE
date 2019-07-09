@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = "_Tareas";
+    string fecha = System.DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin-top:10px;">
+        <div id="ErrorAlert" class="alert alert-danger" style="display:none" role="alert">
+            No contiene controles el día seleccionado!
+        </div>
+        <div id="ErrorEdit" class="alert alert-danger" style="display:none" role="alert">
+            Ocurrio un error al editar el control!
+        </div>
+        <div id="ExitoAlert" class="alert alert-success" style="display:none" role="alert">
+            Controles encontrados con exito!
+        </div>
+        <div id="ExitoEdit" class="alert alert-success" style="display:none" role="alert">
+            Control modificado con exito!
+        </div>
+        <div id="ExitoCreate" class="alert alert-success" style="display:none" role="alert">
+            Control creado con exito!
+        </div>
+    </div>
+</div>
+
+<div class="mt-5" style="background:#fff;border-radius:10px;">
+    <h1 class="text-center" style="font-family: 'Passion One', cursive;
+    font-size: 35px;">CONSUMO AGUA Y GAS</h1>
+    <form id="AjaxForm">
+        <div class="form-group">
+            <label for="fecha">Seleccionar Fecha:</label>
+            <input type="date" name="fecha" id="fecha" value="@fecha" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="turno">Seleccionar Turno:</label>
+            <select class="form-control" name="turno" id="turno">
+                <option value="1">NOCHE</option>
+                <option value="2">DÍA</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="turno">Tipo Consumo:</label>
+            <select class="form-control" name="tipo_consumo" id="tipo_consumo">
+                <option value="1">AGUA</option>
+                <option value="2">GAS</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="SubmitBtn" class="btn btn-primary" style="float:right;margin-bottom:20px;"><i class="fas fa-search" style="font-size:20px;"></i> Buscar</button>
+        </div>
+    </form>
+
+    <div id="bd">
+        <partial name="Datos" />
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $("#AjaxForm").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "@Url.Action("Datos", "Control")", // Url
+                    data: {
+                            // Datos / Parámetros
+                        Fecha: $("#fecha").val(),
+                        Turno: $("#turno").val(),
+                        Tipo_Consumo: $("#tipo_consumo").val()
+                    },
+                    type: "post"  // Verbo HTTP
+                })
+                // Se ejecuta si todo fue bien.
+                .done(function (result) {
+                    if (result != null) {
+
+                        // Actualiza el resultado HTML
+                        $("#bd").html(result);
+
+                        // Un pequeño esfecto especial ;)
+                        $("#database .row").first().hide();
+                        $("#database .row").first().slideToggle("fast");
+                    }
+                })
+                // Se ejecuta si se produjo un error.
+                .fail(function (xhr, status, error) {
+                    // Mostramos un mensaje de error.
+                    $("#ErrorAlert").show("slow").delay(3000).hide("slow");
+                })
+                // Hacer algo siempre, haya sido exitosa o no.
+                .always(function () {
+                    $("#bd").html(result);
+                });
+            });
+        });
+    </script>
+} 

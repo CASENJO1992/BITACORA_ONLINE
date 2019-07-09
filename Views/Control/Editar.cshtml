@@ -1,0 +1,102 @@
+﻿@model Mantencion.Models.Control
+@{
+    Layout = null;
+}
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="AjaxEdit">
+        <div class="form-group">
+            <label for="">N° registro</label>
+            <input asp-for="id_registro" id="id_registro" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Fecha Consumo</label>
+            <input asp-for="fecha" id="fecha" type="date" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Turno</label>
+            <select asp-for="id_turno" id="id_turno" class="form-control">
+                <option value="1">NOCHE</option>
+                <option value="2">DÍA</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Tipo Consumo</label>
+            <select asp-for="id_tipo_consumo" id="id_tipo_consumo" class="form-control">
+                <option value="1">AGUA</option>
+                <option value="2">GAS</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Consumo m³ (Entrada)</label>
+            <input asp-for="consumo_entrada" class="form-control" id="consumo_entrada" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Consumo m³ (Salida)</label>
+            <input asp-for="consumo_salida" id="consumo_salida" class="form-control" type="text" />
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="SubmitEdit" class="btn btn-primary" style="float:right;"><i class="fas fa-sync" style="font-size:20px;"></i> Actualizar</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+        $(function () {
+            $("#AjaxEdit").submit(function (e) {
+                e.preventDefault();
+
+                // Deshabilitamos el botón de Submit
+                $("#SubmitEdit").prop("disabled", true);
+                $.ajax({
+                    url: "@Url.Action("Editar", "Control")", // Url
+                    data: $("#AjaxEdit").serialize(),
+                    type: "post"  // Verbo HTTP
+                })
+                // Se ejecuta si todo fue bien.
+                .done(function (result) {
+                    if (result != null) {
+                        $("#bd").html(result);
+
+                        // Un pequeño esfecto especial ;)
+                        $("#database .row").first().hide();
+                        $("#database .row").first().slideToggle("fast");
+                        // Habilitamos el botón de Submit
+                        $("#SubmitEdit").prop("disabled", false);
+                        $('#myModal').modal('hide')
+                        // Mostramos un mensaje de éxito.
+                        $("#ExitoEdit").show("slow").delay(3000).hide("slow");
+                    }
+                })
+                // Se ejecuta si se produjo un error.
+                .fail(function (xhr, status, error) {
+                    // Mostramos un mensaje de error.
+                    $("#ErrorEdit").show("slow").delay(3000).hide("slow");
+
+                    // Habilitamos el botón de Submit
+                    $("#SubmitEdit").prop("disabled", false);
+                })
+                // Hacer algo siempre, haya sido exitosa o no.
+                .always(function () {
+                    $("#bd").html(result);
+                });
+            });
+        });
+</script>
+<script>
+    jQuery(document).ready(function () {
+
+        jQuery('#myModal').on('hidden.bs.modal', function (e) {
+            jQuery(this).removeData('bs.modal');
+            jQuery(this).find('.modal-content').empty();
+        })
+
+    })
+</script>

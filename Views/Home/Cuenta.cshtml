@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Crear contraseña";
+}
+
+<form class="form-signin" method="post">
+    <img class="mb-4" src="~/images/landes.jpg" style="max-width:100%; margin:auto">
+    <h1 class="h3 mb-3 font-weight-normal text-center" style="margin-bottom:30px;">Crear contraseña</h1>
+    <div style="margin-bottom:10px;">
+        <input type="text" id="inputEmail" class="form-control" placeholder="Usuario" required autofocus name="usuario">
+    </div>
+    <div style="margin-bottom:10px;">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required name="pass">
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Crear contraseña</button>
+    <p class="mt-5 mb-3 text-muted text-center" style="margin-top:30px;">&copy; @System.DateTime.Now.Year Landes</p>
+</form>

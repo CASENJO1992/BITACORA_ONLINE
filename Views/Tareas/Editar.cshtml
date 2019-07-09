@@ -1,0 +1,96 @@
+﻿@model Mantencion.Models.Tareas
+@{
+    Layout = null;
+}
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="AjaxEdit">
+        <div class="form-group">
+            <label for="">N° registro</label>
+            <input asp-for="id_registro" id="id_registro" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Fecha Actividad</label>
+            <input type="date" asp-for="fecha" id="fecha" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Turno</label>
+            <select asp-for="id_turno" id="id_turno" class="form-control">
+                <option value="1">NOCHE</option>
+                <option value="2">DÍA</option>
+                <option value="3">TARDE</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Descripción Actividad</label>
+            <textarea asp-for="actividad" id="actividad" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Actividad Finalizada?</label>
+            <input asp-for="log_terminado" id="log_terminado"/>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="SubmitEdit" class="btn btn-primary" style="float:right;"><i class="fas fa-sync" style="font-size:20px;"></i> Actualizar</button>
+        </div>
+    </form>
+</div>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#AjaxEdit").submit(function (e) {
+                e.preventDefault();
+
+                // Deshabilitamos el botón de Submit
+                $("#SubmitEdit").prop("disabled", true);
+                $.ajax({
+                    url: "@Url.Action("Editar", "Tareas")", // Url
+                    data: $("#AjaxEdit").serialize(),
+                    type: "post"  // Verbo HTTP
+                })
+                // Se ejecuta si todo fue bien.
+                .done(function (result) {
+                    if (result != null) {
+                        $("#bd").html(result);
+
+                        // Un pequeño esfecto especial ;)
+                        $("#database .row").first().hide();
+                        $("#database .row").first().slideToggle("fast");
+                        // Habilitamos el botón de Submit
+                        $("#SubmitEdit").prop("disabled", false);
+                        $('#myModal').modal('hide')
+                        // Mostramos un mensaje de éxito.
+                        $("#ExitoEdit").show("slow").delay(3000).hide("slow");
+                    }
+                })
+                // Se ejecuta si se produjo un error.
+                .fail(function (xhr, status, error) {
+                    // Mostramos un mensaje de error.
+                    $("#ErrorEdit").show("slow").delay(3000).hide("slow");
+
+                    // Habilitamos el botón de Submit
+                    $("#SubmitEdit").prop("disabled", false);
+                })
+                // Hacer algo siempre, haya sido exitosa o no.
+                .always(function () {
+                    $("#bd").html(result);
+                });
+            });
+        });
+    </script>
+    <script>
+        jQuery(document).ready(function () {
+
+            jQuery('#myModal').on('hidden.bs.modal', function (e) {
+                jQuery(this).removeData('bs.modal');
+                jQuery(this).find('.modal-content').empty();
+            })
+
+        })
+    </script>

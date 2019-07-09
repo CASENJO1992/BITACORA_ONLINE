@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Http;
+@{
+    Layout = "_Tareas";
+    string visible = "";
+}
+
+    <div class="caja">
+
+        @if (Context.Session.GetInt32("log_lectura_tareas") == 0)
+        {
+            visible = "none";
+        }
+        else
+        {
+            visible = "initial";
+        }
+
+        <div class="card mb-3" style="margin-right: 20px;border: 3px solid #337ab7;display:@visible">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="~/images/trabajos.jpg" class="card-img" alt="..." style="width:100%;">
+                </div>
+                <div class="col-md-8" style="padding: 20px;">
+                    <div class="card-body">
+                        <h3 class="card-title" style="font-family: 'Passion One', cursive;font-size: 35px;">
+                            Trabajos
+                        </h3>
+                        <p class="card-text">Listado de actividades pendientes y realizadas por turno y fecha.</p>
+                        <a class="btn btn-primary" href="~/Tareas/Index" style="float:right; margin:10px 30px;">Ingresar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Context.Session.GetInt32("log_lectura_controles") == 0)
+        {
+            visible = "none";
+        }
+        else
+        {
+            visible = "initial";
+        }
+
+        <div class="card mb-3" style="border: 3px solid #337ab7;display:@visible">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="~/images/gas.jpg" class="card-img" alt="..." style="width:100%;">
+                </div>
+                <div class="col-md-8" style="padding: 20px;">
+                    <div class="card-body">
+                        <h3 class="card-title" style="font-family: 'Passion One', cursive;font-size: 35px;">
+                            Consumo Diario
+                        </h3>
+                        <p class="card-text">Registro diario de consumo de agua y gas por fecha y turno.</p>
+                        <a class="btn btn-primary" href="~/Control/Index" style="float:right; margin:10px 30px;">Ingresar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
